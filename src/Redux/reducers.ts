@@ -5,7 +5,7 @@ export interface RootState {
 }
 
 interface LoadUsersAction {
-  type: "LOAD_USERS";
+  type: string;
   payload: User[];
 }
 
