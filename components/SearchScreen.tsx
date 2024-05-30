@@ -5,9 +5,10 @@ import SearchBar from "./SearchBar";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loadUsers } from "../Redux/actions";
+import { RootState } from "@/Redux/reducers";
 
 export default function SearchScreen() {
-  const users = useSelector((state) => state.users);
+  const users = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch();
 
   useEffect(() => {
