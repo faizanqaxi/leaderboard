@@ -1,11 +1,11 @@
 import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import SearchBar from "@/components/SearchBar";
+import SearchScreen from "@/components/SearchScreen";
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar />
+      <SearchScreen />
     </SafeAreaView>
   );
 }
