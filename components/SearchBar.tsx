@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import UserList from "./UserList";
+
 import UsersData from "../data/leaderboard.json"; // path to user data
 
 export default function SearchBar() {
@@ -64,24 +66,9 @@ export default function SearchBar() {
           <Text style={styles.buttonText}>Search</Text>
         </TouchableOpacity>
       </View>
+      {/* If search button is pressed, then conditionally render the list of users */}
       {searchResults.length > 0 && (
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.uid}
-          contentContainerStyle={styles.listContainer}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.userContainer,
-                item.uid === searchedUser?.uid && styles.highlight,
-              ]}
-            >
-              <Text style={styles.userText}>
-                {item.rank}. {item.name} - {item.bananas} bananas
-              </Text>
-            </View>
-          )}
-        />
+        <UserList users={searchResults} searchedUser={searchedUser} />
       )}
     </View>
   );
@@ -129,25 +116,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold",
-  },
-  listContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  userContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  userText: {
-    fontSize: 16,
-  },
-  highlight: {
-    backgroundColor: "#ffffcc",
   },
 });
