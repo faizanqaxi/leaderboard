@@ -1,12 +1,16 @@
 import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import SearchScreen from "@/components/SearchScreen";
+import { Provider } from "react-redux";
+import store from "../Redux/store";
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <SearchScreen />
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.container}>
+        <SearchScreen />
+      </SafeAreaView>
+    </Provider>
   );
 }
 

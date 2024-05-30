@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import UserList from "./UserList";
 import SearchBar from "./SearchBar";
-import UsersData from "../data/leaderboard.json"; // path to user data
+
+import { useSelector, useDispatch } from "react-redux";
+import { loadUsers } from "../Redux/actions";
 
 export default function SearchScreen() {
-  const [users, setUsers] = useState(Object.values(UsersData));
+  const users = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUsers());
+  }, [dispatch]);
+
   const [searchResults, setSearchResults] = useState<any>([]);
   const [searchedUser, setSearchedUser] = useState<any>();
 
