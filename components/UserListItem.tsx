@@ -1,24 +1,29 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
+import { User } from "@/types/types";
 
 export default function UserListItem({
   item,
   searchedUser,
 }: {
-  item: any;
-  searchedUser: any;
+  item: User | null | undefined;
+  searchedUser: User | null | undefined;
 }) {
   return (
-    <View
-      style={[
-        styles.userContainer,
-        item.uid === searchedUser?.uid && styles.highlight,
-      ]}
-    >
-      <Text style={styles.userName}>{item.name}</Text>
-      <Text style={styles.userRank}>Rank: {item.rank}</Text>
-      <Text style={styles.userBananas}>{item.bananas} bananas</Text>
-    </View>
+    <>
+      {item ? (
+        <View
+          style={[
+            styles.userContainer,
+            item.uid === searchedUser?.uid && styles.highlight,
+          ]}
+        >
+          <Text style={styles.userName}>{item.name}</Text>
+          <Text style={styles.userRank}>Rank: {item.rank}</Text>
+          <Text style={styles.userBananas}>{item.bananas} bananas</Text>
+        </View>
+      ) : null}
+    </>
   );
 }
 

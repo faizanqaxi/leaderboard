@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar";
 import { useSelector, useDispatch } from "react-redux";
 import { loadUsers } from "../Redux/actions";
 import { RootState } from "@/Redux/reducers";
+import { User } from "@/types/types";
 
 export default function SearchScreen() {
   const users = useSelector((state: RootState) => state.users);
@@ -15,8 +16,8 @@ export default function SearchScreen() {
     dispatch(loadUsers());
   }, [dispatch]);
 
-  const [searchResults, setSearchResults] = useState<any>([]);
-  const [searchedUser, setSearchedUser] = useState<any>();
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchedUser, setSearchedUser] = useState<User | null>();
 
   // Function to handle search logic
   const handleSearch = (searchInput: string) => {

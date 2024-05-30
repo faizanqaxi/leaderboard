@@ -1,13 +1,14 @@
 import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 import UserListItem from "./UserListItem";
+import { User } from "@/types/types";
 
 export default function UserList({
   users,
   searchedUser,
 }: {
-  users: any;
-  searchedUser: any;
+  users: User[];
+  searchedUser: User | null | undefined;
 }) {
   return (
     <View style={styles.container}>
