@@ -1,12 +1,12 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import SearchBar from "@/components/SearchBar";
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SearchBar />
-    </View>
+    </SafeAreaView>
   );
 }
 

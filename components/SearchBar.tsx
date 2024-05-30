@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  FlatList,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -12,32 +14,86 @@ import UsersData from "../data/leaderboard.json"; // path to user data
 
 export default function SearchBar() {
   const [username, setUsername] = useState("");
-  const [users, setUsers] = useState(UsersData);
+  const [users, setUsers] = useState(Object.values(UsersData));
+  const [searchResults, setSearchResults] = useState<any>([]);
+  const [searchedUser, setSearchedUser] = useState<any>();
 
   const handleSearch = () => {
-    console.log("Search button clicked. Username:", username);
-    // Add search logic here
+    const user = users.find(
+      (u) => u.name.toLowerCase() === username.toLowerCase()
+    );
+    if (!user) {
+      Alert.alert(
+        "This user name does not exist! Please specify an existing user name!"
+      );
+      setSearchResults([]);
+      setSearchedUser(null);
+      return;
+    }
+
+    setSearchedUser(user);
+
+    const sortedUsers = [...users].sort((a, b) => b.bananas - a.bananas);
+    const top10Users = sortedUsers.slice(0, 10).map((user, index) => ({
+      ...user,
+      rank: index + 1,
+    }));
+
+    if (top10Users.some((u) => u.uid === user.uid)) {
+      setSearchResults(top10Users);
+    } else {
+      const userRank = sortedUsers.findIndex((u) => u.uid === user.uid) + 1;
+      top10Users[top10Users.length - 1] = { ...user, rank: userRank };
+      setSearchResults(top10Users);
+    }
   };
 
   return (
-    <View style={styles.searchContainer}>
-      <View style={styles.iconContainer}>
-        <Ionicons name="search" size={20} color="gray" />
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <View style={styles.iconContainer}>
+          <Ionicons name="search" size={20} color="gray" />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter username"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSearch}>
+          <Text style={styles.buttonText}>Search</Text>
+        </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSearch}>
-        <Text style={styles.buttonText}>Search</Text>
-      </TouchableOpacity>
+      {searchResults.length > 0 && (
+        <FlatList
+          data={searchResults}
+          keyExtractor={(item) => item.uid}
+          contentContainerStyle={styles.listContainer}
+          renderItem={({ item, index }) => (
+            <View
+              style={[
+                styles.userContainer,
+                item.uid === searchedUser?.uid && styles.highlight,
+              ]}
+            >
+              <Text style={styles.userText}>
+                {item.rank}. {item.name} - {item.bananas} bananas
+              </Text>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -51,6 +107,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: "80%",
+    marginTop: 80,
   },
   iconContainer: {
     padding: 5,
@@ -72,5 +129,25 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold",
+  },
+  listContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+  userContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  userText: {
+    fontSize: 16,
+  },
+  highlight: {
+    backgroundColor: "#ffffcc",
   },
 });
