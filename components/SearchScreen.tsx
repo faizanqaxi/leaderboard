@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet, Alert } from "react-native";
 
 import UserList from "./UserList";
 
