@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { User } from "@/types/types";
+import { User } from "@/src/types/types";
 
 export default function UserListItem({
   item,

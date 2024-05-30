@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 import UserListItem from "./UserListItem";
-import { User } from "@/types/types";
+import { User } from "@/src/types/types";
 
 export default function UserList({
   users,
