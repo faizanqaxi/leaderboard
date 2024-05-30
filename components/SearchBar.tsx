@@ -10,14 +10,21 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function SearchBar({
   handleSearch,
+  handleFuzzySearch,
 }: {
   handleSearch: (searchInput: string) => void;
+  handleFuzzySearch: (input: string) => void;
 }) {
   const [searchInput, setSearchInput] = useState("");
 
   const handleSearchPress = () => {
     handleSearch(searchInput);
     setSearchInput("");
+  };
+
+  const handleInputChange = (input: string) => {
+    setSearchInput(input);
+    handleFuzzySearch(input);
   };
 
   return (
@@ -29,7 +36,7 @@ export default function SearchBar({
         style={styles.input}
         placeholder="Enter username"
         value={searchInput}
-        onChangeText={setSearchInput}
+        onChangeText={handleInputChange}
       />
       <TouchableOpacity style={styles.button} onPress={handleSearchPress}>
         <Text style={styles.buttonText}>Search</Text>

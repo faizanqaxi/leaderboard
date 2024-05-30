@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
-
 import UserList from "./UserList";
-
-import UsersData from "../data/leaderboard.json"; // path to user data
 import SearchBar from "./SearchBar";
+import UsersData from "../data/leaderboard.json"; // path to user data
 
 export default function SearchScreen() {
   const [users, setUsers] = useState(Object.values(UsersData));
@@ -13,12 +11,12 @@ export default function SearchScreen() {
 
   // Function to handle search logic
   const handleSearch = (searchInput: string) => {
-    // Finding the user with the same name as the search input
+    // Finding user based on search input
     const user = users.find(
       (u) => u.name.toLowerCase() === searchInput.toLowerCase()
     );
 
-    // If no such user exist, show alert and return
+    // Alert if user does not exist
     if (!user) {
       Alert.alert(
         "This user name does not exist! Please specify an existing user name!"
@@ -28,17 +26,17 @@ export default function SearchScreen() {
       return;
     }
 
-    // If a user is found
+    // If user exists, set searched user
     setSearchedUser(user);
 
-    // Sorting the users by the number of bananas and get the top 10 users
+    // Sorting users based on bananas and getting top 10 users
     const sortedUsers = [...users].sort((a, b) => b.bananas - a.bananas);
     const top10Users = sortedUsers.slice(0, 10).map((user, index) => ({
       ...user,
       rank: index + 1,
     }));
 
-    // Adding the searched user to the top 10 users
+    // Setting search results based on top 10 users and searched user
     if (top10Users.some((u) => u.uid === user.uid)) {
       setSearchResults(top10Users);
     } else {
@@ -48,10 +46,40 @@ export default function SearchScreen() {
     }
   };
 
+  // Function to handle fuzzy search
+  const handleFuzzySearch = (input: string) => {
+    if (input === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    // Sorting users based on bananas
+    const sortedUsers = users.sort((a, b) => b.bananas - a.bananas);
+
+    // Ranking users based on bananas
+    const rankedUsers = sortedUsers.map((user, index) => ({
+      ...user,
+      rank: index + 1,
+    }));
+
+    // Filtering users based on search input
+    const filteredUsers = rankedUsers.filter((u) =>
+      u.name.toLowerCase().includes(input.trim().toLowerCase())
+    );
+
+    // Sorting filtered users based on their ranks
+    const sortedFilteredUsers = filteredUsers.sort((a, b) => a.rank - b.rank);
+
+    // Setting search results
+    setSearchResults(sortedFilteredUsers);
+  };
+
   return (
     <View style={styles.container}>
-      <SearchBar handleSearch={handleSearch} />
-      {/* If search button is pressed, then conditionally render the list of users */}
+      <SearchBar
+        handleSearch={handleSearch}
+        handleFuzzySearch={handleFuzzySearch}
+      />
       {searchResults.length > 0 && (
         <UserList users={searchResults} searchedUser={searchedUser} />
       )}
